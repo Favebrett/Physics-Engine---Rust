@@ -6,9 +6,14 @@ struct Ball {
 }
 
 fn main() {
-    loop {
+    for _ in 1..10 {
         game_loop();
     }
+}
+
+fn moveball(mut ball: Ball) {
+    ball.x += ball.dx;
+    ball.y += ball.dy;
 }
 
 fn pos(_dx: f64, _dy: f64, _x: f64, _y: f64) -> Ball {
@@ -20,7 +25,7 @@ fn pos(_dx: f64, _dy: f64, _x: f64, _y: f64) -> Ball {
     }
 }
 
-fn telemetry(ball: &Ball) {
+fn telemetry(mut ball: Ball) {
     println!(
         "dx: {}, dy: {}, x: {}, y: {}",
         ball.dx, ball.dy, ball.x, ball.y
@@ -28,7 +33,7 @@ fn telemetry(ball: &Ball) {
 }
 
 fn game_loop() {
-    let ball = pos(0.0, 0.0, 0.0, 0.0);
-
-    telemetry(&ball);
+    let ball = pos(0.0, 0.0, -5.0, 0.0);
+    moveball(ball);
+    telemetry(ball);
 }
