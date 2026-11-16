@@ -1,24 +1,38 @@
+use macroquad::prelude::*;
+
 struct Ball {
-    dx: f64,
-    dy: f64,
-    x: f64,
-    y: f64,
+    dx: f32,
+    dy: f32,
+    x: f32,
+    y: f32,
 }
 
 fn main() {
-    let mut ball = pos(-5.0, 0.0, 0.0, 0.0);
+    let mut ball = pos(0.0, 0.0, 0.0, 0.0);
 
-    for _ in 1..10 {
+    for _ in 1..100 {
         game_loop(&mut ball);
     }
 }
 
-fn moveball(ball: &mut Ball) {
-    ball.x += ball.dx;
-    ball.y += ball.dy;
+async fn draw(ball: &Ball) {
+    clear_background(BLACK);
+
+    draw_circle(ball.x, ball.y, 10.0, YELLOW);
+
+    next_frame().await
 }
 
-fn pos(_dx: f64, _dy: f64, _x: f64, _y: f64) -> Ball {
+fn gravity(ball: &mut Ball) {
+    ball.dy += 9.81 * 0.016;
+}
+
+fn moveball(ball: &mut Ball) {
+    ball.x += ball.dx * 0.016;
+    ball.y += ball.dy * 0.016;
+}
+
+fn pos(_dx: f32, _dy: f32, _x: f32, _y: f32) -> Ball {
     Ball {
         dx: _dx,
         dy: _dy,
@@ -36,5 +50,7 @@ fn telemetry(ball: &Ball) {
 
 fn game_loop(ball: &mut Ball) {
     moveball(ball);
+    gravity(ball);
+    draw(&ball);
     telemetry(&ball);
 }
