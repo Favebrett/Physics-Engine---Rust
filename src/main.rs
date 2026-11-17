@@ -1,4 +1,5 @@
 use macroquad::prelude::*;
+use std::{thread, time::Duration};
 
 struct Ball {
     dx: f32,
@@ -10,8 +11,10 @@ struct Ball {
 fn main() {
     let mut ball = pos(0.0, 0.0, 0.0, 0.0);
 
-    for _ in 1..100 {
+    loop {
         game_loop(&mut ball);
+
+        thread::sleep(Duration::from_millis(32));
     }
 }
 
