@@ -28,16 +28,28 @@ async fn draw(ball: &Ball) {
 }
 
 fn gravity(ball: &mut Ball) {
-    ball.dy -= 9.81 * 0.016;
+    ball.dy -= 9.81 * 0.032;
+}
+
+fn drag(ball: &mut Ball) {
+    let rho = 1.225;
+    let cd = 0.23;
+    let area = 0.01;
+
+    let xdrag = -0.5 * rho * cd * area * ball.dx * ball.dx.abs();
+    let ydrag = -0.5 * rho * cd * area * ball.dy * ball.dy.abs();
+
+    ball.dx += xdrag;
+    ball.dy += ydrag;
 }
 
 fn moveball(ball: &mut Ball) {
-    ball.x += ball.dx * 0.016;
-    ball.y += ball.dy * 0.016;
+    ball.x += ball.dx * 0.032;
+    ball.y += ball.dy * 0.032;
 }
 
 fn collision(ball: &mut Ball) {
-    if ball.y - (ball.radius / 2.0) <= -300.0 {
+    if ball.y - (ball.radius / 2.0) <= -30.0 {
         ball.dy -= ball.dy * 2.0 // inverse the y speed
     }
 }
@@ -60,9 +72,10 @@ fn telemetry(ball: &Ball) {
 }
 
 fn game_loop(ball: &mut Ball) {
+    collision(ball);
     moveball(ball);
     gravity(ball);
-    collision(ball);
+    drag(ball);
     draw(&ball);
     telemetry(&ball);
 }
